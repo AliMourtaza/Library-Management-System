@@ -170,3 +170,47 @@ FROM issued_status
 GROUP BY 1
 HAVING COUNT(*) > 1;
 ```
+
+### 3. CTAS (Create Table As Select)
+
+**Task 6: Create Summary Tables**: Used CTAS to generate new tables based on query results - each book and total book_issued_cnt**
+
+```
+CREATE TABLE book_issued_cnt AS 
+SELECT
+		b.isbn,
+		b.book_title,
+		COUNT(ist.issued_id) AS issued_count
+FROM issued_status AS ist
+JOIN
+books AS b
+ON ist.issued_book_isbn  = b.isbn
+GROUP BY 1,2;
+```
+
+### 4. Data Analysis & Findings
+
+The following SQL queries were used to address specific questions:
+
+Task 7. **Retrieve All Books in a Specific Category**:
+
+```
+SELECT *
+FROM books
+WHERE category = 'History';
+```
+
+Task 8: Find Total Rental Income by Category
+
+```
+SELECT
+	b.category,
+	SUM(b.rental_price) as rental_income,
+	COUNT(ist.issued_id)
+FROM books AS b
+JOIN
+issued_status AS ist
+ON 
+b.isbn = ist.issued_book_isbn
+GROUP BY 1
+```
