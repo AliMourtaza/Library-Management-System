@@ -119,7 +119,6 @@ ALTER TABLE return_status
 ADD CONSTRAINT fk_issued_status
 FOREIGN KEY (issued_id)
 REFERENCES issued_status(issued_id);
-
 ```
 
 ### 2. CRUD Operations
@@ -131,6 +130,43 @@ REFERENCES issued_status(issued_id);
 
 **Task 1. Create a New Book Record**
 -- "978-1-60129-456-2', 'To Kill a Mockingbird', 'Classic', 6.00, 'yes', 'Harper Lee', 'J.B. Lippincott & Co.')"
+```
+INSERT INTO books
+		(isbn, book_title, category, rental_price, status, author, publisher)
+VALUES
+		('978-1-60129-456-2', 'To Kill a Mockingbird', 'Classic', 6.00, 'yes', 'Harper Lee', 'J.B. Lippincott & Co.');
+```
 
+**Task 2: Update Member's Address '125 Oak St' of member_id 'C103**
 
+```
+UPDATE members
+SET member_address = '125 Oak St'
+WHERE member_id = 'C103';
+```
 
+**Task 3: Delete the record with issued_id = 'IS121' from the issued_status table**
+
+```
+DELETE FROM issued_status
+WHERE issued_id = 'IS121';
+```
+
+**Task 4: Select all books issued by the employee with emp_id = 'E101'**
+
+```
+SELECT *
+FROM issued_status
+WHERE issued_emp_id = 'E101';
+```
+
+**Task 5: List Employees Who Have Issued More Than One Book**
+
+```
+SELECT 
+	issued_emp_id,
+	COUNT(*) AS total_issued
+FROM issued_status
+GROUP BY 1
+HAVING COUNT(*) > 1;
+```
