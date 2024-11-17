@@ -200,7 +200,7 @@ FROM books
 WHERE category = 'History';
 ```
 
-Task 8: Find Total Rental Income by Category
+Task 8: **Find Total Rental Income by Category**
 
 ```
 SELECT
@@ -213,4 +213,12 @@ issued_status AS ist
 ON 
 b.isbn = ist.issued_book_isbn
 GROUP BY 1
+```
+
+Task 8: **List Members Who Registered in the Last 180 Days**:
+
+```
+SELECT *
+FROM members
+WHERE reg_date > CURRENT_DATE - INTERVAL '180 days';
 ```
