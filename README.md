@@ -215,10 +215,84 @@ b.isbn = ist.issued_book_isbn
 GROUP BY 1
 ```
 
-Task 8: **List Members Who Registered in the Last 180 Days**:
+Task 9: **List Members Who Registered in the Last 180 Days**:
 
 ```
 SELECT *
 FROM members
 WHERE reg_date > CURRENT_DATE - INTERVAL '180 days';
 ```
+
+10. **List Employees with Their Branch Manager's Name and their branch details**:
+
+```
+SELECT
+	e1.emp_id,
+    e1.emp_name,
+    e1.position,
+    e1.salary,
+	b.*,
+	e2.emp_name AS manager
+FROM employees AS e1
+JOIN
+branch AS b
+ON
+e1.branch_id= b.branch_id
+JOIN
+employees AS e2
+ON
+e2.emp_id = b.manager_id
+```
+
+Task 11. **Create a Table of Books with Rental Price Above a Certain Threshold**:
+
+```
+CREATE TABLE expensive_books AS
+SELECT *
+FROM books
+WHERE rental_price > (SELECT
+			AVG(rental_price)
+			FROM books)
+```
+
+Task 12: **Retrieve the List of Books Not Yet Returned**
+
+```
+SELECT DISTINCT issued_book_name
+FROM issued_status AS ist
+LEFT JOIN
+return_status AS rs
+ON 
+ist.issued_id = rs.issued_id
+WHERE rs.return_id IS NULL
+```
+
+## Advanced SQL Operations
+
+Task 13: **Identify Members with Overdue Books** 
+Write a query to identify members with overdue books (assuming a 30-day return period). Display the member's_id, member's name, book title, issue date, and days overdue.
+
+```
+SELECT
+	ist.issued_member_id,
+	m.member_name,
+	b.book_title,
+	ist.issued_date,
+	CURRENT_DATE - ist.issued_date AS overdue
+FROM issued_status AS ist
+JOIN
+members AS m
+ON ist.issued_member_id = m.member_id
+JOIN
+books AS b
+ON ist.issued_book_isbn = b.isbn
+LEFT JOIN 
+return_status AS rs
+ON ist.issued_id = rs.issued_id
+WHERE
+	return_date IS NULL
+	AND CURRENT_DATE - ist.issued_date > 30
+```
+
+
+
